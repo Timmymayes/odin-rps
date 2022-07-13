@@ -1,4 +1,3 @@
-
 // need a function computerPlay that will randomly return rock paper or scissors. This is the computers player
 
 const ROCK = 3;
