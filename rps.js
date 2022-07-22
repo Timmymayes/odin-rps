@@ -3,19 +3,26 @@
 const ROCK = 3;
 const SCISSOORS = 2;
 const PAPER = 1;
+const GAMEOVER = false;
+let playerWins = 0;
+let computerWins = 0;
 
 const buttons = document.querySelectorAll(".weapon");
 buttons.forEach((btn) => btn.addEventListener("click", getPlayerSelection));
 
-const wrapper = document.querySelector(".wrapper");
+const contentDiv = document.querySelector(".content");
+const gameInput = document.querySelector(".gameInput");
 const resultDiv = document.createElement("div");
 resultDiv.classList.add("results");
+const scoreDiv = document.createElement("div");
+scoreDiv.classList.add("score");
+contentDiv.appendChild(scoreDiv);
+console.log(scoreDiv);
 
 function getPlayerSelection(e) {
   // check if the wrapping div has the results of a previous game if so remove it.
-  if (wrapper.contains(resultDiv)) {
+  if (gameInput.contains(resultDiv)) {
     resultDiv.removeChild(resultDiv.childNodes[0]);
-    //    document.getElementById("test").remove();
   }
   // set player & computer weapons
   let playerWeapon = setWeapon(e.target.id);
@@ -30,7 +37,18 @@ function getPlayerSelection(e) {
   const result = document.createTextNode(winner);
   resultDiv.appendChild(result);
   resultDiv.setAttribute("id", "test");
-  wrapper.appendChild(resultDiv);
+  gameInput.appendChild(resultDiv);
+
+  //  clear the current score
+  if (scoreDiv.hasChildNodes()) {
+    scoreDiv.childNodes.forEach((currentItem) => {
+      currentItem.remove();
+    });
+  }
+  const score = document.createTextNode(
+    "Player:" + playerWins + " || Computer: " + computerWins
+  );
+  scoreDiv.appendChild(score);
 }
 
 function computerPlay() {
@@ -91,6 +109,7 @@ function getResult(isPlayerWinner, playerWeapon, computerWeapon) {
       " beats " +
       getWeapon(computerWeapon) +
       "!";
+    playerWins += 1;
   } else if (playerWeapon === computerWeapon) {
     resultText =
       "You tied! " +
@@ -105,6 +124,7 @@ function getResult(isPlayerWinner, playerWeapon, computerWeapon) {
       " beats " +
       getWeapon(playerWeapon) +
       ".";
+    computerWins += 1;
   }
   return resultText;
 }
