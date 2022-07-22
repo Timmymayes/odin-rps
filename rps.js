@@ -4,19 +4,34 @@ const ROCK = 3;
 const SCISSOORS = 2;
 const PAPER = 1;
 
+const buttons = document.querySelectorAll(".weapon");
+buttons.forEach((btn) => btn.addEventListener("click", getPlayerSelection));
+
+const wrapper = document.querySelector(".wrapper");
+const resultDiv = document.createElement("div");
+resultDiv.classList.add("results");
+
 function getPlayerSelection(e) {
+  // check if the wrapping div has the results of a previous game if so remove it.
+  if (wrapper.contains(resultDiv)) {
+    resultDiv.removeChild(resultDiv.childNodes[0]);
+    //    document.getElementById("test").remove();
+  }
+  // set player & computer weapons
   let playerWeapon = setWeapon(e.target.id);
   let computerWeapon = computerPlay();
-  printResult(
+  // get game result
+  let winner = getResult(
     executeRound(playerWeapon, computerWeapon),
     playerWeapon,
     computerWeapon
   );
-  console.log(executeRound());
+  // write the result to the page
+  const result = document.createTextNode(winner);
+  resultDiv.appendChild(result);
+  resultDiv.setAttribute("id", "test");
+  wrapper.appendChild(resultDiv);
 }
-
-const buttons = document.querySelectorAll(".weapon");
-buttons.forEach((btn) => btn.addEventListener("click", getPlayerSelection));
 
 function computerPlay() {
   let min = Math.ceil(1);
@@ -67,32 +82,31 @@ function getWeapon(selection) {
   }
 }
 
-function printResult(isPlayerWinner, playerWeapon, computerWeapon) {
+function getResult(isPlayerWinner, playerWeapon, computerWeapon) {
+  let resultText = "";
   if (isPlayerWinner) {
-    console.log(
+    resultText =
       "You Won! " +
-        getWeapon(playerWeapon) +
-        " beats " +
-        getWeapon(computerWeapon) +
-        "!"
-    );
+      getWeapon(playerWeapon) +
+      " beats " +
+      getWeapon(computerWeapon) +
+      "!";
   } else if (playerWeapon === computerWeapon) {
-    console.log(
+    resultText =
       "You tied! " +
-        getWeapon(playerWeapon) +
-        " and " +
-        getWeapon(computerWeapon) +
-        " cancel each other out."
-    );
+      getWeapon(playerWeapon) +
+      " and " +
+      getWeapon(computerWeapon) +
+      " cancel each other out.";
   } else {
-    console.log(
+    resultText =
       "You lost! " +
-        getWeapon(computerWeapon) +
-        " beats " +
-        getWeapon(playerWeapon) +
-        "."
-    );
+      getWeapon(computerWeapon) +
+      " beats " +
+      getWeapon(playerWeapon) +
+      ".";
   }
+  return resultText;
 }
 
 // computerChoice = computerPlay();
