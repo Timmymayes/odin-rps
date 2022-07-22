@@ -17,7 +17,6 @@ resultDiv.classList.add("results");
 const scoreDiv = document.createElement("div");
 scoreDiv.classList.add("score");
 contentDiv.appendChild(scoreDiv);
-console.log(scoreDiv);
 
 function getPlayerSelection(e) {
   // check if the wrapping div has the results of a previous game if so remove it.
@@ -49,6 +48,17 @@ function getPlayerSelection(e) {
     "Player:" + playerWins + " || Computer: " + computerWins
   );
   scoreDiv.appendChild(score);
+
+  // End game
+  if (playerWins === 5 || computerWins === 5) {
+    buttons.forEach((btn) => {
+      btn.removeEventListener("click", getPlayerSelection);
+    });
+    const gameOverDiv = document.createElement("div");
+    const gameOverText = document.createTextNode("Game Over!");
+    gameOverDiv.appendChild(gameOverText);
+    gameInput.appendChild(gameOverDiv);
+  }
 }
 
 function computerPlay() {
